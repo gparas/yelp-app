@@ -4,6 +4,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Animated,
+  StatusBar,
 } from 'react-native';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
@@ -25,10 +26,18 @@ function mapDispatchToProps(dispatch) {
 }
 
 class HomeScreen extends Component {
+  static navigationOptions = {
+    header: null,
+  };
+
   state = {
     scale: new Animated.Value(1),
     opacity: new Animated.Value(1),
   };
+
+  componentDidMount() {
+    StatusBar.setBarStyle('dark-content', true);
+  }
 
   componentDidUpdate() {
     this.toggleMenu();
@@ -44,12 +53,16 @@ class HomeScreen extends Component {
       Animated.spring(this.state.scale, {
         toValue: 0.9,
       }).start();
+
+      StatusBar.setBarStyle('light-content', true);
     }
 
     if (this.props.action == 'closeMenu') {
       Animated.spring(this.state.scale, {
         toValue: 1,
       }).start();
+
+      StatusBar.setBarStyle('dark-content', true);
     }
   };
 
@@ -71,21 +84,21 @@ class HomeScreen extends Component {
                   <Name>Meng</Name>
                 </TouchableOpacity>
               </TitleBar>
-              <ScrollView
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}
-                style={{ paddingBottom: 30 }}
-              >
-                {cards.map((card, index) => (
+              {cards.map((card, index) => (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => {
+                    this.props.navigation.push('Detail');
+                  }}
+                >
                   <Card
-                    key={index}
                     title={card.title}
                     image={card.image}
                     subtitle={card.subtitle}
                     caption={card.caption}
                   />
-                ))}
-              </ScrollView>
+                </TouchableOpacity>
+              ))}
             </ScrollView>
           </SafeAreaView>
         </AnimatedContainer>
