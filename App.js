@@ -1,21 +1,30 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 
-export default class App extends React.Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-      </View>
-    );
+import HomeScreen from './screens/HomeScreen';
+
+const initialState = {
+  action: 'closeMenu',
+};
+
+const reducer = (state = initialState, action) => {
+  switch (action.type) {
+    case 'OPEN_MENU':
+      return { action: 'openMenu' };
+    case 'CLOSE_MENU':
+      return { action: 'closeMenu' };
+    default:
+      return state;
   }
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+const store = createStore(reducer);
+
+const App = () => (
+  <Provider store={store}>
+    <HomeScreen />
+  </Provider>
+);
+
+export default App;
