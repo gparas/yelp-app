@@ -5,6 +5,8 @@ import {
   TouchableOpacity,
   Animated,
   StatusBar,
+  View,
+  ActivityIndicator,
 } from 'react-native';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
@@ -25,6 +27,16 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
+const config = {
+  headers: {
+    Authorization:
+      'Bearer WCFP1SlL3XCcoqv4-s8YqGaspg0ZDLf1vihiqYrTrtctedn3_B4kZs8OAPQR-HFnd652kco9RaWuyUiy0DqN0b7dvWNsy1NDEeLxAI7XS8FtBtgWwmo0bSa-A1PdXHYx',
+  },
+  params: {
+    categories: 'breakfast_brunch',
+  },
+};
+
 class HomeScreen extends Component {
   static navigationOptions = {
     header: null,
@@ -33,20 +45,40 @@ class HomeScreen extends Component {
   state = {
     scale: new Animated.Value(1),
     opacity: new Animated.Value(1),
+    isLoading: true,
   };
 
   componentDidMount() {
     StatusBar.setBarStyle('dark-content', true);
+    this.getDataFromApi('Toronto');
   }
+
+  getDataFromApi = locationSearched => {
+    return fetch(
+      `https://api.yelp.com/v3/businesses/search?location=${locationSearched}`,
+      config
+    )
+      .then(response => response.json())
+      .then(response => {
+        this.setState(
+          {
+            isLoading: false,
+            dataSource: response,
+          },
+          function() {}
+        );
+      })
+      .catch(error => {
+        this.setState({
+          errorState: `Sorry we coudln't find information related to the location you search, do you want to try something else?`,
+          isLoading: false,
+        });
+      });
+  };
 
   componentDidUpdate() {
     this.toggleMenu();
   }
-
-  state = {
-    scale: new Animated.Value(1),
-    opacity: new Animated.Value(1),
-  };
 
   toggleMenu = () => {
     if (this.props.action == 'openMenu') {
@@ -67,6 +99,16 @@ class HomeScreen extends Component {
   };
 
   render() {
+    if (this.state.isLoading) {
+      return (
+        <View
+          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+        >
+          <ActivityIndicator size='large' color='#0000ff' />
+        </View>
+      );
+    }
+    console.log(this.state.dataSource);
     return (
       <RootView>
         <Menu />
@@ -80,22 +122,28 @@ class HomeScreen extends Component {
             <ScrollView>
               <TitleBar>
                 <Title>Welcome back,</Title>
-                <TouchableOpacity onPress={() => this.props.openMenu()}>
-                  <Name>Meng</Name>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.props.navigation.navigate('Map', {
+                      dataSource: this.state.dataSource,
+                    });
+                  }}
+                >
+                  <Name>Map</Name>
                 </TouchableOpacity>
               </TitleBar>
-              {cards.map((card, index) => (
+              {this.state.dataSource.businesses.map(card => (
                 <TouchableOpacity
-                  key={index}
+                  key={card.id}
                   onPress={() => {
                     this.props.navigation.push('Detail');
                   }}
                 >
                   <Card
-                    title={card.title}
-                    image={card.image}
-                    subtitle={card.subtitle}
-                    caption={card.caption}
+                    title={card.name}
+                    image={{ uri: card.image_url }}
+                    subtitle={card.rating}
+                    caption={card.name}
                   />
                 </TouchableOpacity>
               ))}
@@ -141,29 +189,9 @@ const Name = styled.Text`
   font-weight: bold;
 `;
 
-const cards = [
-  {
-    title: 'React Native for Designers',
-    image: require('../assets/card-image.jpg'),
-    subtitle: 'React Native',
-    caption: '1 of 12 sections',
-  },
-  {
-    title: 'Styled Components',
-    image: require('../assets/card-image.jpg'),
-    subtitle: 'React Native',
-    caption: '2 of 12 sections',
-  },
-  {
-    title: 'Props and Icons',
-    image: require('../assets/card-image.jpg'),
-    subtitle: 'React Native',
-    caption: '3 of 12 sections',
-  },
-  {
-    title: 'Static Data and Loop',
-    image: require('../assets/card-image.jpg'),
-    subtitle: 'React Native',
-    caption: '4 of 12 sections',
-  },
-];
+const Message = styled.Text`
+  margin: 20px;
+  color: #b8bece;
+  font-size: 15px;
+  font-weight: 500;
+`;
