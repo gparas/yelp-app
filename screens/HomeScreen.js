@@ -7,12 +7,15 @@ import {
   StatusBar,
   View,
   ActivityIndicator,
+  Dimensions,
 } from 'react-native';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 
 import Card from '../components/Card';
 import Menu from '../components/Menu';
+
+const { width } = Dimensions.get('window');
 
 function mapStateToProps(state) {
   return { action: state.action };
@@ -108,7 +111,7 @@ class HomeScreen extends Component {
         </View>
       );
     }
-    console.log(this.state.dataSource);
+    // console.log(this.state.dataSource);
     return (
       <RootView>
         <Menu />
@@ -132,21 +135,23 @@ class HomeScreen extends Component {
                   <Name>Map</Name>
                 </TouchableOpacity>
               </TitleBar>
-              {this.state.dataSource.businesses.map(card => (
-                <TouchableOpacity
-                  key={card.id}
-                  onPress={() => {
-                    this.props.navigation.push('Detail');
-                  }}
-                >
-                  <Card
-                    title={card.name}
-                    image={{ uri: card.image_url }}
-                    subtitle={card.rating}
-                    caption={card.name}
-                  />
-                </TouchableOpacity>
-              ))}
+              <CardWrapper>
+                {this.state.dataSource.businesses.map(card => (
+                  <TouchableOpacity
+                    key={card.id}
+                    onPress={() => {
+                      this.props.navigation.push('Detail');
+                    }}
+                  >
+                    <Card
+                      width={width}
+                      image={{ uri: card.image_url }}
+                      title={card.name}
+                      caption={card.rating}
+                    />
+                  </TouchableOpacity>
+                ))}
+              </CardWrapper>
             </ScrollView>
           </SafeAreaView>
         </AnimatedContainer>
@@ -164,10 +169,18 @@ const RootView = styled.View`
   background: black;
   flex: 1;
 `;
+
 const Container = styled.View`
   background: #f0f3f5;
   flex: 1;
-  border-radius: 10px;
+`;
+
+const CardWrapper = styled.View`
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding-left: 20px;
+  padding-right: 20px;
 `;
 
 const AnimatedContainer = Animated.createAnimatedComponent(Container);

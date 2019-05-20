@@ -22,6 +22,10 @@ class MapScreen extends Component {
     StatusBar.setBarStyle('light-content', true);
   }
 
+  componentWillUnmount() {
+    StatusBar.setBarStyle('dark-content', true);
+  }
+
   fitToMarkersToMap() {
     const { navigation } = this.props;
     const dataSource = navigation.getParam('dataSource', '');

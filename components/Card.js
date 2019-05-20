@@ -1,35 +1,32 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Card = props => (
-  <Container>
-    <Cover>
-      <Image source={props.image} />
-      <Title>{props.title}</Title>
-    </Cover>
-    <Content>
-      <Caption>{props.caption}</Caption>
-      <Subtitle>{props.subtitle}</Subtitle>
-    </Content>
-  </Container>
-);
+const Card = props => {
+  return (
+    <Container width={props.width}>
+      <Cover>
+        <Image source={props.image} />
+      </Cover>
+      <Content>
+        <Title>{props.title}</Title>
+        <Caption>{props.caption}</Caption>
+      </Content>
+    </Container>
+  );
+};
 
 export default Card;
 
-const Container = styled.View`
-  background-color: white;
-  width: 315px;
-  border-radius: 14px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-  margin-left: 20px;
-  margin-top: 20px;
-`;
+const Container = styled.View(props => ({
+  width: props.width / 2 - 30,
+  marginBottom: 20,
+}));
 
 const Cover = styled.View`
   width: 100%;
-  height: 200px;
-  border-top-left-radius: 14px;
-  border-top-right-radius: 14px;
+  height: 150px;
+  border-radius: 4px;
+  margin-bottom: 8px;
   overflow: hidden;
 `;
 
@@ -42,28 +39,12 @@ const Image = styled.Image`
 `;
 
 const Title = styled.Text`
-  color: white;
-  font-size: 24px;
+  font-size: 17px;
   font-weight: bold;
-  width: 170px;
-  margin-top: 20px;
-  margin-left: 20px;
 `;
 
-const Content = styled.View`
-  padding: 20px;
-`;
+const Content = styled.View``;
 
 const Caption = styled.Text`
-  color: #3c4560;
-  font-size: 20px;
-  font-weight: 600;
-`;
-
-const Subtitle = styled.Text`
-  color: #b8bece;
-  font-weight: 600;
-  font-size: 15px;
-  text-transform: uppercase;
-  margin-top: 4px;
+  font-size: 12px;
 `;
