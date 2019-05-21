@@ -1,14 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Footnote, Caption } from './Typography';
 
 const Card = props => {
   return (
-    <Container width={props.width}>
+    <Container width={props.width / 2 - 30}>
       <Cover>
         <Image source={props.image} />
       </Cover>
       <Content>
-        <Title>{props.title}</Title>
+        <Footnote>{props.title}</Footnote>
         <Caption>{props.caption}</Caption>
       </Content>
     </Container>
@@ -17,10 +18,10 @@ const Card = props => {
 
 export default Card;
 
-const Container = styled.View(props => ({
-  width: props.width / 2 - 30,
-  marginBottom: 20,
-}));
+const Container = styled.View`
+  width: ${props => props.width};
+  margin-bottom: 20px;
+`;
 
 const Cover = styled.View`
   width: 100%;
@@ -38,13 +39,4 @@ const Image = styled.Image`
   height: 100%;
 `;
 
-const Title = styled.Text`
-  font-size: 17px;
-  font-weight: bold;
-`;
-
 const Content = styled.View``;
-
-const Caption = styled.Text`
-  font-size: 12px;
-`;

@@ -3,32 +3,17 @@ import {
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
-  Animated,
   StatusBar,
   View,
   ActivityIndicator,
   Dimensions,
 } from 'react-native';
 import styled from 'styled-components';
-import { connect } from 'react-redux';
 
+import { Title2 } from '../components/Typography';
 import Card from '../components/Card';
-import Menu from '../components/Menu';
 
 const { width } = Dimensions.get('window');
-
-function mapStateToProps(state) {
-  return { action: state.action };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    openMenu: () =>
-      dispatch({
-        type: 'OPEN_MENU',
-      }),
-  };
-}
 
 const config = {
   headers: {
@@ -46,8 +31,6 @@ class HomeScreen extends Component {
   };
 
   state = {
-    scale: new Animated.Value(1),
-    opacity: new Animated.Value(1),
     isLoading: true,
   };
 
@@ -79,28 +62,6 @@ class HomeScreen extends Component {
       });
   };
 
-  componentDidUpdate() {
-    this.toggleMenu();
-  }
-
-  toggleMenu = () => {
-    if (this.props.action == 'openMenu') {
-      Animated.spring(this.state.scale, {
-        toValue: 0.9,
-      }).start();
-
-      StatusBar.setBarStyle('light-content', true);
-    }
-
-    if (this.props.action == 'closeMenu') {
-      Animated.spring(this.state.scale, {
-        toValue: 1,
-      }).start();
-
-      StatusBar.setBarStyle('dark-content', true);
-    }
-  };
-
   render() {
     if (this.state.isLoading) {
       return (
@@ -111,83 +72,74 @@ class HomeScreen extends Component {
         </View>
       );
     }
-    // console.log(this.state.dataSource);
     return (
-      <RootView>
-        <Menu />
-        <AnimatedContainer
-          style={{
-            transform: [{ scale: this.state.scale }],
-            opacity: this.state.opacity,
-          }}
-        >
-          <SafeAreaView>
-            <ScrollView>
-              <TitleBar>
-                <Title>Welcome back,</Title>
+      <SafeAreaView>
+        <TitleBar height={54}>
+          <TouchableOpacity
+            onPress={() => {
+              this.props.navigation.navigate('Map', {
+                dataSource: this.state.dataSource,
+              });
+            }}
+          >
+            <Name>Map</Name>
+          </TouchableOpacity>
+        </TitleBar>
+        <ScrollView>
+          <Container>
+            <Title2>What can we help you find?</Title2>
+            <CardWrapper>
+              {this.state.dataSource.businesses.map(card => (
                 <TouchableOpacity
+                  key={card.id}
                   onPress={() => {
-                    this.props.navigation.navigate('Map', {
-                      dataSource: this.state.dataSource,
+                    this.props.navigation.push('Detail', {
+                      id: card.id,
                     });
                   }}
                 >
-                  <Name>Map</Name>
+                  <Card
+                    width={width}
+                    image={{ uri: card.image_url }}
+                    title={card.name}
+                    caption={card.rating}
+                  />
                 </TouchableOpacity>
-              </TitleBar>
-              <CardWrapper>
-                {this.state.dataSource.businesses.map(card => (
-                  <TouchableOpacity
-                    key={card.id}
-                    onPress={() => {
-                      this.props.navigation.push('Detail');
-                    }}
-                  >
-                    <Card
-                      width={width}
-                      image={{ uri: card.image_url }}
-                      title={card.name}
-                      caption={card.rating}
-                    />
-                  </TouchableOpacity>
-                ))}
-              </CardWrapper>
-            </ScrollView>
-          </SafeAreaView>
-        </AnimatedContainer>
-      </RootView>
+              ))}
+            </CardWrapper>
+          </Container>
+        </ScrollView>
+      </SafeAreaView>
     );
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(HomeScreen);
+export default HomeScreen;
 
-const RootView = styled.View`
-  background: black;
-  flex: 1;
+const TitleBar = styled.View`
+  padding-left: 20px;
+  padding-right: 20px;
+  border-bottom-width: 1px;
+  border-bottom-color: #dddddd;
+  height: ${props => props.height};
 `;
 
 const Container = styled.View`
-  background: #f0f3f5;
   flex: 1;
+  padding-top: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
 `;
-
 const CardWrapper = styled.View`
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
-  padding-left: 20px;
-  padding-right: 20px;
 `;
 
-const AnimatedContainer = Animated.createAnimatedComponent(Container);
-
-const TitleBar = styled.View`
-  width: 100%;
-  padding-left: 20px;
+const Headline = styled.Text`
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 20px;
 `;
 
 const Title = styled.Text`
@@ -200,11 +152,4 @@ const Name = styled.Text`
   font-size: 20px;
   color: #3c4560;
   font-weight: bold;
-`;
-
-const Message = styled.Text`
-  margin: 20px;
-  color: #b8bece;
-  font-size: 15px;
-  font-weight: 500;
 `;
