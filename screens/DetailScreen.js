@@ -11,15 +11,7 @@ import {
 import { Icon } from 'expo';
 import styled from 'styled-components';
 
-const config = {
-  headers: {
-    Authorization:
-      'Bearer WCFP1SlL3XCcoqv4-s8YqGaspg0ZDLf1vihiqYrTrtctedn3_B4kZs8OAPQR-HFnd652kco9RaWuyUiy0DqN0b7dvWNsy1NDEeLxAI7XS8FtBtgWwmo0bSa-A1PdXHYx',
-  },
-  params: {
-    categories: 'breakfast_brunch',
-  },
-};
+import fetchData from '../fetchData';
 
 const { width } = Dimensions.get('window');
 
@@ -35,25 +27,17 @@ class DetailScreen extends Component {
   componentDidMount() {
     StatusBar.setBarStyle('light-content', true);
 
-    const { navigation } = this.props;
-    const id = navigation.getParam('id', '');
-    return fetch(`https://api.yelp.com/v3/businesses/${id}`, config)
-      .then(response => response.json())
-      .then(response => {
-        this.setState(
-          {
-            isLoading: false,
-            dataSource: response,
-          },
-          function() {}
-        );
-      })
-      .catch(error => {
+    const id = this.props.navigation.getParam('id', '');
+
+    fetchData(`https://api.yelp.com/v3/businesses/${id}`)
+      .then(data => {
         this.setState({
-          errorState: `Sorry we coudln't find information related to the location you search, do you want to try something else?`,
           isLoading: false,
+          dataSource: data,
         });
-      });
+        console.log(data);
+      })
+      .catch(err => console.log('Ooops, error', err.message));
   }
 
   componentWillUnmount() {

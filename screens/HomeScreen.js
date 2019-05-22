@@ -12,18 +12,9 @@ import styled from 'styled-components';
 
 import { Title2 } from '../components/Typography';
 import Card from '../components/Card';
+import fetchData from '../fetchData';
 
 const { width } = Dimensions.get('window');
-
-const config = {
-  headers: {
-    Authorization:
-      'Bearer WCFP1SlL3XCcoqv4-s8YqGaspg0ZDLf1vihiqYrTrtctedn3_B4kZs8OAPQR-HFnd652kco9RaWuyUiy0DqN0b7dvWNsy1NDEeLxAI7XS8FtBtgWwmo0bSa-A1PdXHYx',
-  },
-  params: {
-    categories: 'breakfast_brunch',
-  },
-};
 
 class HomeScreen extends Component {
   static navigationOptions = {
@@ -36,31 +27,17 @@ class HomeScreen extends Component {
 
   componentDidMount() {
     StatusBar.setBarStyle('dark-content', true);
-    this.getDataFromApi('Toronto');
-  }
 
-  getDataFromApi = locationSearched => {
-    return fetch(
-      `https://api.yelp.com/v3/businesses/search?location=${locationSearched}`,
-      config
-    )
-      .then(response => response.json())
-      .then(response => {
-        this.setState(
-          {
-            isLoading: false,
-            dataSource: response,
-          },
-          function() {}
-        );
-      })
-      .catch(error => {
+    fetchData('https://api.yelp.com/v3/businesses/search?location=nyc')
+      .then(data => {
         this.setState({
-          errorState: `Sorry we coudln't find information related to the location you search, do you want to try something else?`,
           isLoading: false,
+          dataSource: data,
         });
-      });
-  };
+        console.log(data);
+      })
+      .catch(err => console.log('Ooops, error', err.message));
+  }
 
   render() {
     if (this.state.isLoading) {
