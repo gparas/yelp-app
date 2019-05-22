@@ -17,7 +17,30 @@ const { width } = Dimensions.get('window');
 
 class DetailScreen extends Component {
   static navigationOptions = {
-    header: null,
+    headerTransparent: true,
+    headerStyle: {
+      backgroundImage:
+        'linear-gradient(-180deg, #000000 0%, rgba(0,0,0,0.00) 100%)',
+    },
+    headerTintColor: '#fff',
+    headerRight: (
+      <TouchableOpacity
+        onPress={() => {
+          this.props.navigation.goBack();
+        }}
+      >
+        <View
+          style={{
+            width: 48,
+            height: 48,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Icon.Ionicons name='ios-heart-empty' size={24} color='white' />
+        </View>
+      </TouchableOpacity>
+    ),
   };
 
   state = {
@@ -76,26 +99,6 @@ class DetailScreen extends Component {
               <Headline>{dataSource.name}</Headline>
             </Container>
           </SafeAreaView>
-          <Actions>
-            <TouchableOpacity
-              onPress={() => {
-                this.props.navigation.goBack();
-              }}
-            >
-              <IconView>
-                <Icon.Ionicons name='ios-arrow-back' size={24} color='white' />
-              </IconView>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                this.props.navigation.goBack();
-              }}
-            >
-              <IconView>
-                <Icon.Ionicons name='ios-heart-empty' size={24} color='white' />
-              </IconView>
-            </TouchableOpacity>
-          </Actions>
         </ScrollView>
       </RootView>
     );
@@ -106,23 +109,6 @@ export default DetailScreen;
 
 const RootView = styled.View`
   flex: 1;
-`;
-
-const IconView = styled.View`
-  width: 48px;
-  height: 48px;
-  justify-content: center;
-  align-items: center;
-`;
-
-const Actions = styled.View`
-  position: absolute;
-  top: 30px;
-  left: 12px;
-  right: 12px;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
 `;
 
 const Container = styled.View`
