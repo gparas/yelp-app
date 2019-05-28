@@ -1,6 +1,8 @@
 import React from 'react';
+import { StyleSheet, View, Text } from 'react-native';
 import styled from 'styled-components';
 import { Footnote, Caption } from './Typography';
+import { fonts } from '../designSystem';
 
 const Card = props => {
   return (
@@ -9,7 +11,7 @@ const Card = props => {
         <Image source={props.image} />
       </Cover>
       <Content>
-        <Footnote>{props.title}</Footnote>
+        <Text style={{ ...fonts.Headline }}>{props.title}</Text>
         <Caption>{props.caption}</Caption>
       </Content>
     </Container>
