@@ -15,12 +15,10 @@ const Tile = props => {
         resizeMode={'cover'}
         borderRadius={8}
       />
-      <Typography variant={'footnote'} color={'textSecondary'}>
+      <Typography variant={'caption'} color={'textSecondary'}>
         {caption}
       </Typography>
-      <Typography variant={'headline'} gutterBottom>
-        {title}
-      </Typography>
+      <Typography variant={'title'}>{title}</Typography>
       <Rating votes={rating} size={16} />
     </View>
   );

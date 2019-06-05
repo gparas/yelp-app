@@ -32,56 +32,31 @@ const styles = StyleSheet.create({
     fontWeight: fontWeights.bold,
     fontSize: 34,
     lineHeight: 41,
-  },
-  title1: {
-    fontWeight: fontWeights.regular,
-    fontSize: 28,
-    lineHeight: 34,
-  },
-  title2: {
-    fontWeight: fontWeights.regular,
-    fontSize: 22,
-    lineHeight: 28,
-  },
-  title3: {
-    fontWeight: fontWeights.regular,
-    fontSize: 20,
-    lineHeight: 25,
+    letterSpacing: 0.41,
   },
   headline: {
-    fontWeight: fontWeights.semiBold,
+    fontWeight: fontWeights.bold,
+    fontSize: 22,
+    lineHeight: 28,
+    letterSpacing: 0.35,
+  },
+  title: {
+    fontWeight: fontWeights.regular,
     fontSize: 17,
     lineHeight: 22,
+    letterSpacing: -0.41,
   },
   body: {
     fontWeight: fontWeights.regular,
-    fontSize: 17,
-    lineHeight: 22,
-  },
-  callout: {
-    fontWeight: fontWeights.regular,
-    fontSize: 16,
-    lineHeight: 21,
-  },
-  subhead: {
-    fontWeight: fontWeights.regular,
     fontSize: 15,
     lineHeight: 20,
+    letterSpacing: -0.24,
   },
-  footnote: {
+  caption: {
     fontWeight: fontWeights.regular,
     fontSize: 13,
     lineHeight: 18,
-  },
-  caption1: {
-    fontWeight: fontWeights.regular,
-    fontSize: 12,
-    lineHeight: 16,
-  },
-  caption2: {
-    fontWeight: fontWeights.regular,
-    fontSize: 11,
-    lineHeight: 13,
+    letterSpacing: -0.08,
   },
   colorPrimary: {
     color: colors.primary,
@@ -108,15 +83,10 @@ Typography.propTypes = {
 
   variant: PropTypes.oneOf([
     'largeTitle',
-    'title1',
-    'title2',
     'headline',
+    'title',
     'body',
-    'callout',
-    'subhead',
-    'footnote',
-    'caption1',
-    'caption2',
+    'caption',
   ]),
 
   color: PropTypes.oneOf([

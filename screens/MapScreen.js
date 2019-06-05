@@ -3,12 +3,12 @@ import _ from 'lodash';
 import {
   StyleSheet,
   View,
-  Text,
   Dimensions,
   TouchableOpacity,
   StatusBar,
 } from 'react-native';
-import styled from 'styled-components';
+import { LinearGradient } from 'expo';
+import Button from '../components/Button';
 import { MapView, Icon } from 'expo';
 
 const { width, height } = Dimensions.get('window');
@@ -36,7 +36,7 @@ class MapScreen extends Component {
     const { navigation } = this.props;
     const dataSource = navigation.getParam('dataSource', '');
     return (
-      <Container>
+      <View style={styles.root}>
         <MapView
           style={styles.map}
           ref={ref => {
@@ -69,49 +69,55 @@ class MapScreen extends Component {
             );
           })}
         </MapView>
-        <View style={{ marginVertical: 20 }}>
-          <TouchableOpacity onPress={() => this.fitToMarkersToMap()}>
-            <Text>Fit Markers Onto Map</Text>
-          </TouchableOpacity>
-        </View>
+        <Button
+          onPress={() => this.fitToMarkersToMap()}
+          label='Fit Markers'
+          style={{ marginBottom: 30 }}
+        />
+        <LinearGradient
+          colors={['rgba(0,0,0,0.4)', 'transparent']}
+          style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            top: 0,
+            height: 300,
+          }}
+        />
         <TouchableOpacity
           onPress={() => {
             this.props.navigation.goBack();
           }}
           style={{
             position: 'absolute',
-            top: 120,
-            left: '50%',
-            marginLeft: -22,
+            top: 32,
+            left: 10,
             zIndex: 1,
           }}
         >
-          <CloseView>
-            <Icon.Ionicons name='ios-close' size={44} color='#546bfb' />
-          </CloseView>
+          <View style={styles.close}>
+            <Icon.Ionicons name='ios-close' size={44} color='#ffffff' />
+          </View>
         </TouchableOpacity>
-      </Container>
+      </View>
     );
   }
 }
 
 export default MapScreen;
 
-const Container = styled.View`
-  flex: 1;
-`;
-
-const CloseView = styled.View`
-  width: 44px;
-  height: 44px;
-  border-radius: 22px;
-  background: white;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
-`;
-
 const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  close: {
+    width: 44,
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   map: {
     ...StyleSheet.absoluteFillObject,
   },

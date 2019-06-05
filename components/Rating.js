@@ -31,11 +31,7 @@ export default class Rating extends Component {
         <View style={styles.stars}>
           {this.stars}
           {votes ? (
-            <Typography
-              variant={'footnote'}
-              color={'textMuted'}
-              style={{ marginLeft: 3 }}
-            >
+            <Typography color={'textSecondary'} style={{ marginLeft: 3 }}>
               {votes}
             </Typography>
           ) : null}

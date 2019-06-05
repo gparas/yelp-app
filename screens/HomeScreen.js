@@ -7,15 +7,19 @@ import {
   View,
   ActivityIndicator,
   Button,
-  Text,
 } from 'react-native';
-import styled from 'styled-components';
 
 import Tile from '../components/Tile';
+import Typography from '../components/Typography';
+import Container from '../components/Container';
+import Grid from '../components/Grid';
 import fetchData from '../fetchData';
 
 class HomeScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
+    headerStyle: {
+      borderBottomWidth: 0,
+    },
     headerRight: (
       <Button
         title={'map'}
@@ -63,8 +67,10 @@ class HomeScreen extends Component {
       <SafeAreaView>
         <ScrollView>
           <Container>
-            <Text>What can we help you find?</Text>
-            <CardWrapper>
+            <Typography variant={'headline'} style={{ marginBottom: 30 }}>
+              What can we help you find?
+            </Typography>
+            <Grid>
               {this.state.dataSource.businesses.map(card => (
                 <TouchableOpacity
                   key={card.id}
@@ -82,7 +88,7 @@ class HomeScreen extends Component {
                   />
                 </TouchableOpacity>
               ))}
-            </CardWrapper>
+            </Grid>
           </Container>
         </ScrollView>
       </SafeAreaView>
@@ -91,15 +97,3 @@ class HomeScreen extends Component {
 }
 
 export default HomeScreen;
-
-const Container = styled.View`
-  flex: 1;
-  padding-top: 20px;
-  padding-left: 20px;
-  padding-right: 20px;
-`;
-const CardWrapper = styled.View`
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-between;
-`;
