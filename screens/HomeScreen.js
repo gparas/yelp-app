@@ -7,11 +7,11 @@ import {
   View,
   ActivityIndicator,
   Button,
+  Text,
 } from 'react-native';
 import styled from 'styled-components';
 
-import { Title2 } from '../components/Typography';
-import Tiles from '../components/Tiles';
+import Tile from '../components/Tile';
 import fetchData from '../fetchData';
 
 class HomeScreen extends Component {
@@ -63,7 +63,7 @@ class HomeScreen extends Component {
       <SafeAreaView>
         <ScrollView>
           <Container>
-            <Title2>What can we help you find?</Title2>
+            <Text>What can we help you find?</Text>
             <CardWrapper>
               {this.state.dataSource.businesses.map(card => (
                 <TouchableOpacity
@@ -74,8 +74,8 @@ class HomeScreen extends Component {
                     });
                   }}
                 >
-                  <Tiles
-                    source={{ uri: card.image_url }}
+                  <Tile
+                    imageSrc={{ uri: card.image_url }}
                     title={card.name}
                     caption={card.categories[0].title}
                     rating={card.rating}
@@ -102,22 +102,4 @@ const CardWrapper = styled.View`
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
-`;
-
-const Headline = styled.Text`
-  font-size: 24px;
-  font-weight: 700;
-  margin-bottom: 20px;
-`;
-
-const Title = styled.Text`
-  font-size: 16px;
-  color: #b8bece;
-  font-weight: 500;
-`;
-
-const Name = styled.Text`
-  font-size: 20px;
-  color: #3c4560;
-  font-weight: bold;
 `;

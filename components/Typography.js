@@ -1,54 +1,137 @@
 import React from 'react';
-import styled from 'styled-components';
+import PropTypes from 'prop-types';
+import { Text, StyleSheet } from 'react-native';
 
-export const LargeTitle = styled.Text`
-  font-size: 44px;
-  font-weight: 700;
-  line-height: 56px;
-`;
+import { capitalize } from '../config/helpers';
+import colors from '../config/colors';
 
-export const Title1 = styled.Text`
-  font-size: 32px;
-  font-weight: 700;
-  line-height: 36px;
-`;
-
-export const Title2 = styled.Text`
-  font-size: 22px;
-  font-weight: 600;
-  line-height: 26px;
-`;
-
-export const Headline = styled.Text`
-  font-size: 19px;
-  font-weight: 400;
-  line-height: 24px;
-`;
-
-export const Body = styled.Text`
-  font-size: 17px;
-  font-weight: 400;
-  line-height: 22px;
-`;
-
-export const Footnote = styled.Text`
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 18px;
-`;
-
-export const Caption = styled.Text`
-  font-size: 11px;
-  font-weight: 400;
-  line-height: 13px;
-`;
-
-export default {
-  LargeTitle,
-  Title1,
-  Title2,
-  Headline,
-  Body,
-  Footnote,
-  Caption,
+const fontWeights = {
+  regular: '400',
+  bold: '700',
+  semiBold: '600',
 };
+
+const Typography = props => {
+  const { style, variant, color, gutterBottom, ...other } = props;
+
+  return (
+    <Text
+      style={StyleSheet.flatten([
+        style && style,
+        variant && styles[variant],
+        color && styles[`color${capitalize(color)}`],
+        gutterBottom && styles.gutterBottom,
+      ])}
+      {...other}
+    />
+  );
+};
+
+const styles = StyleSheet.create({
+  largeTitle: {
+    fontWeight: fontWeights.bold,
+    fontSize: 34,
+    lineHeight: 41,
+  },
+  title1: {
+    fontWeight: fontWeights.regular,
+    fontSize: 28,
+    lineHeight: 34,
+  },
+  title2: {
+    fontWeight: fontWeights.regular,
+    fontSize: 22,
+    lineHeight: 28,
+  },
+  title3: {
+    fontWeight: fontWeights.regular,
+    fontSize: 20,
+    lineHeight: 25,
+  },
+  headline: {
+    fontWeight: fontWeights.semiBold,
+    fontSize: 17,
+    lineHeight: 22,
+  },
+  body: {
+    fontWeight: fontWeights.regular,
+    fontSize: 17,
+    lineHeight: 22,
+  },
+  callout: {
+    fontWeight: fontWeights.regular,
+    fontSize: 16,
+    lineHeight: 21,
+  },
+  subhead: {
+    fontWeight: fontWeights.regular,
+    fontSize: 15,
+    lineHeight: 20,
+  },
+  footnote: {
+    fontWeight: fontWeights.regular,
+    fontSize: 13,
+    lineHeight: 18,
+  },
+  caption1: {
+    fontWeight: fontWeights.regular,
+    fontSize: 12,
+    lineHeight: 16,
+  },
+  caption2: {
+    fontWeight: fontWeights.regular,
+    fontSize: 11,
+    lineHeight: 13,
+  },
+  colorPrimary: {
+    color: colors.primary,
+  },
+  colorSecondary: {
+    color: colors.secondary,
+  },
+  colorTextPrimary: {
+    color: colors.text.primary,
+  },
+  colorTextSecondary: {
+    color: colors.text.secondary,
+  },
+  colorTextMuted: {
+    color: colors.text.muted,
+  },
+  gutterBottom: {
+    marginBottom: 8,
+  },
+});
+
+Typography.propTypes = {
+  gutterBottom: PropTypes.bool,
+
+  variant: PropTypes.oneOf([
+    'largeTitle',
+    'title1',
+    'title2',
+    'headline',
+    'body',
+    'callout',
+    'subhead',
+    'footnote',
+    'caption1',
+    'caption2',
+  ]),
+
+  color: PropTypes.oneOf([
+    'primary',
+    'secondary',
+    'textPrimary',
+    'textSecondary',
+    'textMuted',
+  ]),
+};
+
+Typography.defaultProps = {
+  variant: 'body',
+  color: 'textPrimary',
+  gutterBottom: false,
+};
+
+export default Typography;

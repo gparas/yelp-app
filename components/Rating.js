@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { PropTypes } from 'prop-types';
-import { Ionicons } from '@expo/vector-icons';
-import { View, Text, StyleSheet } from 'react-native';
-import colors from '../styles/colors';
+import PropTypes from 'prop-types';
+import { Icon } from 'expo';
+import { View, StyleSheet } from 'react-native';
+import colors from '../config/colors';
+import Typography from './Typography';
 
 export default class Rating extends Component {
   get stars() {
@@ -11,7 +12,7 @@ export default class Rating extends Component {
     const starElements = [];
     for (let i = 0; i < 5; i++) {
       starElements.push(
-        <Ionicons
+        <Icon.Ionicons
           key={`star-${i}`}
           name='md-star'
           size={size}
@@ -29,7 +30,15 @@ export default class Rating extends Component {
       <View style={styles.root}>
         <View style={styles.stars}>
           {this.stars}
-          {votes ? <Text style={styles.votesNumber}>{votes}</Text> : null}
+          {votes ? (
+            <Typography
+              variant={'footnote'}
+              color={'textMuted'}
+              style={{ marginLeft: 3 }}
+            >
+              {votes}
+            </Typography>
+          ) : null}
         </View>
       </View>
     );
@@ -52,11 +61,5 @@ const styles = StyleSheet.create({
   stars: {
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  votesNumber: {
-    fontSize: 13,
-    lineHeight: 16,
-    marginLeft: 3,
-    color: colors.textLight,
   },
 });

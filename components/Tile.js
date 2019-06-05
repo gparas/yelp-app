@@ -1,22 +1,26 @@
 import React from 'react';
 import { View, Text, Image, Dimensions, StyleSheet } from 'react-native';
 import Rating from './Rating';
-import colors from '../styles/colors';
+import Typography from './Typography';
 
 const { width } = Dimensions.get('window');
 
-const Tiles = props => {
-  const { title, source, rating, caption } = props;
+const Tile = props => {
+  const { title, imageSrc, rating, caption } = props;
   return (
     <View style={styles.root}>
       <Image
         style={styles.image}
-        source={source}
+        source={imageSrc}
         resizeMode={'cover'}
         borderRadius={8}
       />
-      <Text style={styles.caption}>{caption}</Text>
-      <Text style={styles.title}>{title}</Text>
+      <Typography variant={'footnote'} color={'textSecondary'}>
+        {caption}
+      </Typography>
+      <Typography variant={'headline'} gutterBottom>
+        {title}
+      </Typography>
       <Rating votes={rating} size={16} />
     </View>
   );
@@ -27,16 +31,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     width: width / 2 - 30,
   },
-  title: {
-    fontSize: 15,
-    lineHeight: 20,
-    fontWeight: '600',
-  },
-  caption: {
-    fontSize: 13,
-    lineHeight: 18,
-    color: colors.textSecondary,
-  },
   image: {
     width: '100%',
     height: 110,
@@ -44,4 +38,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Tiles;
+export default Tile;
