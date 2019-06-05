@@ -6,20 +6,27 @@ import {
   StatusBar,
   View,
   ActivityIndicator,
-  Dimensions,
+  Button,
 } from 'react-native';
 import styled from 'styled-components';
 
 import { Title2 } from '../components/Typography';
-import Card from '../components/Card';
+import Tiles from '../components/Tiles';
 import fetchData from '../fetchData';
 
-const { width } = Dimensions.get('window');
-
 class HomeScreen extends Component {
-  static navigationOptions = {
-    header: null,
-  };
+  static navigationOptions = ({ navigation }) => ({
+    headerRight: (
+      <Button
+        title={'map'}
+        onPress={() => {
+          navigation.navigate('Map', {
+            dataSource: navigation.getParam('dataSource'),
+          });
+        }}
+      />
+    ),
+  });
 
   state = {
     isLoading: true,
@@ -32,6 +39,9 @@ class HomeScreen extends Component {
       .then(data => {
         this.setState({
           isLoading: false,
+          dataSource: data,
+        });
+        this.props.navigation.setParams({
           dataSource: data,
         });
         console.log(data);
@@ -51,17 +61,6 @@ class HomeScreen extends Component {
     }
     return (
       <SafeAreaView>
-        <TitleBar height={54}>
-          <TouchableOpacity
-            onPress={() => {
-              this.props.navigation.navigate('Map', {
-                dataSource: this.state.dataSource,
-              });
-            }}
-          >
-            <Name>Map</Name>
-          </TouchableOpacity>
-        </TitleBar>
         <ScrollView>
           <Container>
             <Title2>What can we help you find?</Title2>
@@ -75,11 +74,11 @@ class HomeScreen extends Component {
                     });
                   }}
                 >
-                  <Card
-                    width={width}
-                    image={{ uri: card.image_url }}
+                  <Tiles
+                    source={{ uri: card.image_url }}
                     title={card.name}
-                    caption={card.rating}
+                    caption={card.categories[0].title}
+                    rating={card.rating}
                   />
                 </TouchableOpacity>
               ))}
@@ -92,14 +91,6 @@ class HomeScreen extends Component {
 }
 
 export default HomeScreen;
-
-const TitleBar = styled.View`
-  padding-left: 20px;
-  padding-right: 20px;
-  border-bottom-width: 1px;
-  border-bottom-color: #dddddd;
-  height: ${props => props.height};
-`;
 
 const Container = styled.View`
   flex: 1;
